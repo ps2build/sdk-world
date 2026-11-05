@@ -6,12 +6,11 @@ on:
 
 jobs:
   build:
-    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ps2build/setup-sdk@master
+      - uses: ps2build/setup-sdk@main
         with:
           ps2dev: /opt/ps2dev
           components: toolchain,sdk-core,tools,ninja,llvm-toolchain
