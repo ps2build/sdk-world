@@ -1,0 +1,10 @@
+name: z
+origin: port:zlib
+tier: world
+license: Zlib
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    lib: lib/libz.a

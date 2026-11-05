@@ -1,0 +1,4 @@
+/**
+ * @defgroup sdr sdr
+ * @brief Definitions for libsdr on the EE
+ */

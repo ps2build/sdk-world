@@ -1,0 +1,9 @@
+project: libtap
+
+targets:
+  - name: tap
+    type: ee_lib
+    sources:
+      - src/tap.c
+    include_dirs:
+      - include

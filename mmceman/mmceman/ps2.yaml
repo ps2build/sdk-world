@@ -1,0 +1,19 @@
+project: mmceman
+
+targets:
+  - name: mmceman
+    type: iop
+    sources:
+      - ../src/ioplib.c
+      - ../src/sio2man_hook.c
+      - ../src/mmce_sio2.c
+      - ../src/mmce_cmds.c
+      - ../src/mmce_fs.c
+      - ../src/mmceman.c
+    defines:
+      - IOMANX_OLD_NAME_COMPATIBILITY=0
+      - IOMANX_OLD_NAME_ADDDELDRV=0
+    imports_lst: ../src/imports.lst
+    include_dirs:
+      - ../include
+    headers: [dmacman, intrman, iomanx, loadcore, threadman, stdio, sysclib, sio2man]

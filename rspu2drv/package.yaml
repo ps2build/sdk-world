@@ -1,0 +1,10 @@
+name: rspu2drv
+origin: ps2sdk
+tier: world
+license: AFL-2.0
+
+artifacts:
+  - kind: driver
+    target: [iop]
+    headers: [snd2,spu2,intrman,loadcore,sifcmd,sifman,stdio,sysclib,sysmem,threadman,vblank]
+    irx: bin/rspu2drv.irx

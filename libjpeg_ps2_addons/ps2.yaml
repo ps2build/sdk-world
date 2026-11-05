@@ -1,0 +1,10 @@
+project: libjpeg_ps2_addons
+
+targets:
+  - name: jpeg_ps2_addons
+    type: ee_lib
+    sources:
+      - src/libjpg_ps2_addons.c
+    include_dirs:
+      - include
+    headers: [jpeg, kernel]

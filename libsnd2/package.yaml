@@ -1,0 +1,11 @@
+name: snd2
+origin: ps2sdk
+tier: world
+license: AFL-2.0
+
+artifacts:
+  - kind: library
+    target: [iop]
+    include_dirs: [include]
+    headers: [spu2,intrman,loadcore,stdio,sysclib,sysmem,threadman,timrman,vblank]
+    lib: lib/libsnd2.a

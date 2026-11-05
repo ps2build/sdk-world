@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  release:
+    if: false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ps2build/setup-sdk@master
+        with:
+          ps2dev: /opt/ps2dev
+          components: toolchain,sdk-core,tools,ninja,llvm-toolchain
+
+      - name: Fetch jpeg package
+        run: |
+          release="$(curl -fsSL https://api.github.com/repos/ps2build/libjpeg-turbo/releases/latest)"
+
+          for pair in packages:gcc packages-llvm:llvm; do
+            set="${pair%%:*}"
+            toolchain="${pair##*:}"
+
+            asset_url="$(printf '%s' "$release" |
+              jq -r --arg tc "$toolchain" '[.assets[] |
+                select(.name | test("^jpeg-.*-" + $tc + "\.zip$")) |
+                .browser_download_url][0]')"
+
+            if [ -z "$asset_url" ] || [ "$asset_url" = "null" ]; then
+              echo "no jpeg $toolchain release asset found"
+              exit 1
+            fi
+
+            archive="$RUNNER_TEMP/$(basename "$asset_url")"
+            curl -fsSL "$asset_url" -o "$archive"
+
+            dest="/opt/ps2dev/$set/world/jpeg"
+            mkdir -p "$dest"
+            unzip -o -q "$archive" -d "$dest"
+            rm -f "$archive"
+          done
+
+      - name: Build and install
+        run: ps2build install -c ps2workspace.yaml --packages /opt/ps2dev/packages
+
+      - name: Build and install with LLVM
+        run: |
+          ps2build install             -c ps2workspace.yaml             -o build-llvm             --toolchain llvm             --packages /opt/ps2dev/packages-llvm
+
+      - name: Collect licenses
+        run: .github/scripts/collect-licenses.sh /opt/ps2dev/licenses/world
+
+      - name: Package
+        run: |
+          (cd /opt/ps2dev &&             zip -r "$GITHUB_WORKSPACE/sdk-world-${GITHUB_REF_NAME}-gcc.zip" packages/world licenses/world &&             zip -r "$GITHUB_WORKSPACE/sdk-world-${GITHUB_REF_NAME}-llvm.zip" packages-llvm/world)
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: sdk-world-*.zip

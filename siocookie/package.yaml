@@ -1,0 +1,11 @@
+name: siocookie
+origin: port:SIOCookie
+tier: world
+license: MIT
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    headers: [kernel]
+    lib: lib/libsiocookie.a

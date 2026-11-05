@@ -1,0 +1,10 @@
+name: lua
+origin: port:lua
+tier: world
+license: MIT
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [src]
+    lib: lib/liblua.a

@@ -1,0 +1,170 @@
+/**
+ * @defgroup audio audio
+ * @brief Sounds on mixer channels and PCM streaming for the EE, with an IOP driver on the SPU2.
+ *
+ * The library has two parts: an IOP module, `audio.irx`, that drives the SPU2, and an EE library,
+ * `libaudio.a`, that talks to it. The functions are in audio.h, and audio_core.h has the same functions on
+ * an explicit context. @ref audio_concepts describes how the parts fit together, and @ref audio_adp the sound
+ * file format. Code written against audsrv can use the audsrv-compat package instead; see @ref audsrv_migration.
+ *
+ * @see @ref audio_concepts
+ * @see @ref audio_adp
+ * @see @ref audio_loading
+ */
+
+/**
+ * @page audio_concepts Concepts
+ *
+ * @section audio_concepts_parts Sounds, channels and the stream
+ *
+ * The SPU2 plays two kinds of audio, and the library keeps them apart.
+ *
+ * - A **sound** is ADPCM data kept in SPU2 memory. audio_sound_load_adpcm() and audio_sound_load_apcm()
+ *   upload it and return a handle. A sound is loaded once and can play on several channels at once.
+ * - A **channel** is a mixer strip, numbered 0 to 23. audio_channel_play_sound() starts a sound on a channel.
+ * - The **stream** is PCM data that an application feeds while it plays, such as music or video audio.
+ *   There is one stream per context, and it plays alongside the channels.
+ *
+ * @section audio_concepts_channels Channel settings
+ *
+ * A channel keeps its volume, pan and pitch until they are changed. They persist from one sound to the next,
+ * after a sound ends, and can be set before the first sound plays. A sound played with
+ * audio_channel_play_sound() uses the settings the channel has.
+ *
+ * audio_play_sound() picks the first idle channel itself. It resets that channel to volume 100, centered,
+ * normal pitch first, so a one-shot sound does not inherit what an earlier sound left there. An application
+ * that keeps settings on channels should play on those channels with audio_channel_play_sound().
+ *
+ * Playing on a channel that is busy replaces the sound there at once.
+ *
+ * @section audio_concepts_commands Commands and ordering
+ *
+ * The calls that play, stop or change a channel return as soon as the command is sent. The driver runs them in
+ * the order they were sent, so a call that asks for a result, such as audio_channel_is_playing(), sees the
+ * effect of the commands before it. The library checks what can fail (channel range, value ranges, and that a
+ * sound handle is live) before sending.
+ *
+ * @section audio_concepts_stream The stream
+ *
+ * audio_stream_start() sets the format: 8000 to 48000 Hz, 8 or 16 bits, mono or stereo. The library converts
+ * the data to the 48 kHz stereo 16-bit layout the SPU2 input plays. All byte counts in the stream functions are
+ * in the format the application gave.
+ *
+ * audio_stream_queue_pcm() copies data and returns how much it accepted; it never waits. Two ways to feed it
+ * at the right pace:
+ *
+ * - Call audio_stream_wait_until_writable() for the size of the next chunk, then queue that chunk. The wait
+ *   guarantees the space.
+ * - Register audio_stream_set_low_data_callback(). The library calls it on its own thread when the queue
+ *   drains to a threshold; the callback queues the next data.
+ *
+ * A stream that runs out of data plays silence until more is queued. Pausing keeps queued data.
+ *
+ * @section audio_concepts_effects Effects
+ *
+ * The SPU2 has a reverb and delay unit. audio_effect_set_preset() selects one of ten presets, and nothing is
+ * heard until a source is sent to it with audio_channel_set_effect_send() or audio_stream_set_effect_send().
+ * See @ref audio_effect.
+ *
+ * @section audio_concepts_threads Threads
+ *
+ * All functions can be called from any thread. A thread waiting in audio_stream_wait_until_writable() does not
+ * stop other threads from using the library. Stop the threads that use the library before calling
+ * audio_shutdown(); waiters return -AUDIO_ERR_INTERRUPTED.
+ *
+ * @section audio_concepts_units Units
+ *
+ * | Quantity | Unit | Range |
+ * |---|---|---|
+ * | Volume | percent | 0 to 100 |
+ * | Pan | balance | -100 (left), 0 (center), 100 (right) |
+ * | Pitch | ratio of the sound's own rate | 0.0625 to 4.0 |
+ * | Channel | number | 0 to 23 |
+ * | Effect depth | percent | 0 to 100 |
+ * | Effect delay, feedback | steps | 0 to 255 |
+ * | Stream data | bytes in the stream format | |
+ * | Timeouts | milliseconds | 0 polls once, -1 waits forever |
+ *
+ * @section audio_concepts_errors Errors
+ *
+ * A function returns a value of 0 or more on success, or the negated error code on failure. See @ref audio_errors.
+ * audio_get_error_message() gives text for a code.
+ */
+
+/**
+ * @page audio_adp Sound files (.adp)
+ *
+ * audio_sound_load_apcm() loads the `.adp` files that Open PS2 Loader uses. A file has a 16-byte header
+ * followed by PS-ADPCM blocks of 16 bytes (28 samples each).
+ *
+ * | Offset | Size | Field |
+ * |---|---|---|
+ * | 0x00 | 4 | `APCM` |
+ * | 0x04 | 1 | version, 1 |
+ * | 0x05 | 1 | channels, 1 or 2 |
+ * | 0x06 | 1 | loop, 1 to play until stopped |
+ * | 0x07 | 1 | reserved |
+ * | 0x08 | 4 | pitch value written by the encoder (little endian) |
+ * | 0x0C | 4 | sample frames per channel (little endian) |
+ * | 0x10 | | ADPCM blocks. Stereo: every left block, then every right block. |
+ *
+ * The header has no sample rate; the library plays these files at 44100 Hz. Each channel's run of blocks ends
+ * with one extra block that the encoder flags to repeat itself. The library rewrites the loop flags when it
+ * uploads a sound: a sound that plays once ends at the last block of each run, and a looping sound repeats
+ * each run from its first block.
+ *
+ * audio_sound_load_adpcm() takes the same block data without the header, with the rate, channel count and
+ * loop setting passed in a audio_sound_desc_t.
+ */
+
+/**
+ * @page audio_loading Loading the driver
+ *
+ * The EE library talks to `audio.irx`, which the application loads before calling audio_init(). It needs
+ * `libsd.irx` loaded first. The library does not load modules itself, because a library archive cannot carry
+ * a module and an application may already have loaded them.
+ *
+ * With ps2build, embed the modules in the program and load them from memory:
+ *
+ * @code{.yaml}
+ * targets:
+ *   - name: game
+ *     type: ee
+ *     sources: [main.c]
+ *     libs: [audio]
+ *     embed_irx: [libsd, audio]
+ * @endcode
+ *
+ * @code{.c}
+ * #include "libsd_irx.h"
+ * #include "audio_irx.h"
+ *
+ * SifInitRpc(0);
+ * sbv_patch_enable_lmb();
+ * SifExecModuleBuffer(libsd_irx, size_libsd_irx, 0, NULL, NULL);
+ * SifExecModuleBuffer(audio_irx, size_audio_irx, 0, NULL, NULL);
+ * audio_init();
+ * @endcode
+ *
+ * A minimal sound example:
+ *
+ * @code{.c}
+ * audio_sound_t sound;
+ *
+ * audio_sound_load_apcm(file, file_size, &sound);
+ * audio_channel_set_volume(0, 80);
+ * audio_channel_play_sound(0, sound);
+ * @endcode
+ *
+ * A minimal stream example, feeding 44100 Hz stereo 16-bit PCM:
+ *
+ * @code{.c}
+ * audio_stream_format_t format = {44100, 16, 2};
+ *
+ * audio_stream_start(&format);
+ * while (have_data) {
+ *     audio_stream_wait_until_writable(chunk_bytes, -1);
+ *     audio_stream_queue_pcm(chunk, chunk_bytes);
+ * }
+ * @endcode
+ */

@@ -1,0 +1,4 @@
+/**
+ * @defgroup ppctty ppctty
+ * @brief IOP module that redirects printf output to the PowerPC UART of DECKARD consoles; unloads itself on other models.
+ */

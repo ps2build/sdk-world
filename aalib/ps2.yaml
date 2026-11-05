@@ -1,0 +1,41 @@
+project: aalib
+
+targets:
+  - name: aa
+    type: ee_lib
+    sources:
+      - src/aafont.c
+      - src/aafonts.c
+      - src/aavyhen.c
+      - src/aamktabl.c
+      - src/aamem.c
+      - src/aaprintf.c
+      - src/aahelp.c
+      - src/aaslnkbd.c
+      - src/aaslang.c
+      - src/aafastre.c
+      - src/fontgl.c
+      - src/font16.c
+      - src/font14.c
+      - src/fontx16.c
+      - src/fontx13.c
+      - src/fontx13b.c
+      - src/fontcour.c
+      - src/aarec.c
+      - src/font9.c
+      - src/font8.c
+      - src/fontline.c
+      - src/aalib.c
+      - src/aaflush.c
+      - src/aarender.c
+      - src/aaout.c
+      - src/aain.c
+      - src/aaedit.c
+      - src/aaregist.c
+      - src/aasave.c
+      - src/aastdout.c
+      - src/aastdin.c
+      - src/aaparse.c
+    include_dirs:
+      - include
+    headers: [debug, ps2ip]

@@ -1,0 +1,9 @@
+project: audio-example-sound
+
+targets:
+  - name: sound
+    type: ee
+    sources:
+      - main.c
+    libs: [audio, patches, debug]
+    embed_irx: [libsd, "audio:audio"]

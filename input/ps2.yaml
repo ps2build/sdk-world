@@ -1,0 +1,10 @@
+project: input
+
+targets:
+  - name: input
+    type: ee_lib
+    sources:
+      - src/input.c
+    include_dirs:
+      - include
+    headers: [kernel, pad, mtap]

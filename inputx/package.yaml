@@ -1,0 +1,10 @@
+name: inputx
+origin: ps2sdk
+tier: world
+license: AFL-2.0
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    lib: lib/libinputx.a

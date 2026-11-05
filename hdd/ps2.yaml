@@ -1,0 +1,10 @@
+project: hdd
+
+targets:
+  - name: hdd
+    type: ee_lib
+    sources:
+      - src/libhdd.c
+    include_dirs:
+      - include
+    headers: [filexio, kernel, cdvd, poweroff]

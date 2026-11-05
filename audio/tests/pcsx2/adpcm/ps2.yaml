@@ -1,0 +1,9 @@
+project: adpcm
+
+targets:
+  - name: adpcm
+    type: ee
+    sources:
+      - src/main.c
+    libs: [audio, patches, kernel]
+    embed_irx: [libsd, audio]

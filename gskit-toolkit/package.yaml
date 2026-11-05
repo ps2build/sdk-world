@@ -1,0 +1,12 @@
+name: gskit_toolkit
+origin: port:gskit
+tier: world
+license: AFL-2.0
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    headers: [gskit]
+    links: [png]
+    lib: lib/libgskit_toolkit.a

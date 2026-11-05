@@ -1,0 +1,36 @@
+project: audio
+
+targets:
+  - name: audio
+    type: ee_lib
+    sources:
+      - src/core/audio_errors.c
+      - src/core/audio_adpcm.c
+      - src/core/audio_core.c
+      - src/core/audio_flat.c
+      - src/core/audio_pcm.c
+    include_dirs:
+      - include
+      - src/core
+      - src/common
+    headers: [kernel]
+
+  - name: audio-iop
+    type: iop
+    sources:
+      - src/iop/audio_main.c
+      - src/iop/spu_ram.c
+      - src/iop/spu_voice.c
+      - src/iop/spu_effect.c
+      - src/iop/audio_effects.c
+      - src/iop/audio_sounds.c
+      - src/iop/audio_channels.c
+      - src/iop/audio_server.c
+      - src/iop/audio_stream.c
+      - src/iop/spu_stream.c
+    imports_lst: src/iop/imports.lst
+    exports_tab: src/iop/exports.tab
+    include_dirs:
+      - src/iop
+      - src/common
+    headers: [libsd, loadcore, intrman, sifcmd, stdio, sysclib, sysmem, threadman]

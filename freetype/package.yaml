@@ -1,0 +1,11 @@
+name: freetype
+origin: port:freetype
+tier: world
+# FreeType License or GPL-2.0-or-later, at the consumer's choice.
+license: "FTL OR GPL-2.0-or-later"
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    lib: lib/libfreetype.a

@@ -1,0 +1,17 @@
+project: mmcedrv
+
+targets:
+  - name: mmcedrv
+    type: iop
+    sources:
+      - ../src/ioplib.c
+      - ../src/sio2man_hook.c
+      - ../src/mmce_sio2.c
+      - ../src/mmcedrv.c
+    defines:
+      - MMCEDRV
+    imports_lst: ../src/imports.lst
+    exports_tab: ../src/exports.tab
+    include_dirs:
+      - ../include
+    headers: [dmacman, intrman, loadcore, threadman, stdio, sysclib, sio2man]

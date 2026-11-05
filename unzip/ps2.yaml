@@ -1,0 +1,13 @@
+project: unzip
+
+targets:
+  - name: unzip
+    type: ee_lib
+    sources:
+      - src/unzip.c
+      - src/ioapi.c
+    include_dirs:
+      - src
+    headers: [z]
+    cflags:
+      - -DIOAPI_NO_64

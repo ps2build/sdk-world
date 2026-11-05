@@ -1,0 +1,12 @@
+name: audsrv-compat
+origin: new
+tier: world
+license: AFL-2.0
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    headers: [kernel, audio]
+    links: [audio]
+    lib: lib/libaudsrv-compat.a

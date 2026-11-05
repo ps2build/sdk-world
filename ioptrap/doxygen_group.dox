@@ -1,0 +1,4 @@
+/**
+ * @defgroup ioptrap ioptrap
+ * @brief IOP exception handler and breakpoint support; other IOP modules hook it through set_exception_handler.
+ */

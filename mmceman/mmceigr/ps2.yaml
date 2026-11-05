@@ -1,0 +1,12 @@
+project: mmceigr
+
+targets:
+  - name: mmceigr
+    type: iop
+    sources:
+      - ../src/mmceigr.c
+    defines:
+      - MMCEIGR
+    include_dirs:
+      - ../include
+    headers: [dmacman, intrman, iomanx, loadcore, threadman, stdio, sysclib]

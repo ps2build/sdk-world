@@ -1,0 +1,34 @@
+workspace: ps2sdk-world
+
+members:
+  - dmakit
+  - gskit
+  - gskit-toolkit
+  - hdd
+  - input
+  - inputx
+  - sdr
+  - libsnd2
+  - rspu2drv
+  - lua
+  - libmad
+  - aalib
+  - libtap
+  - siocookie
+  - mmceman/mmceman
+  - mmceman/mmcedrv
+  - mmceman/mmceigr
+  - zlib
+  - libid3tag
+  - unzip
+  - libjpeg_ps2_addons
+  - smbman
+  - freetype
+  - libpng
+  - subfile
+  - hash
+  - ioptrap
+  - udptty
+  - ppctty
+  - audio
+  - audsrv-compat

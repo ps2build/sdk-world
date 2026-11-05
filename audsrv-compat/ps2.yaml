@@ -1,0 +1,11 @@
+project: audsrv-compat
+
+targets:
+  - name: audsrv-compat
+    type: ee_lib
+    sources:
+      - src/audsrv_shim.c
+    include_dirs:
+      - include
+      - ../audio/include
+    headers: [kernel]

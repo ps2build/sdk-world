@@ -1,0 +1,16 @@
+project: ioptrap
+
+targets:
+  - name: ioptrap
+    type: iop
+    sources:
+      - src/ioptrap.c
+      - src/breakpoint.c
+      - src/handler.S
+    imports_lst: src/imports.lst
+    exports_tab: src/exports.tab
+    defines: [IOPTRAP_PRINT_MODULE_NAME]
+    include_dirs:
+      - include
+      - src
+    headers: [excepman, loadcore, sifman, stdio, sysclib, threadman]

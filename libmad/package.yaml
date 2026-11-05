@@ -1,0 +1,10 @@
+name: mad
+origin: port:libmad
+tier: world
+license: GPL-2.0
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    lib: lib/libmad.a

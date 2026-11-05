@@ -1,0 +1,11 @@
+name: unzip
+origin: port:unzip
+tier: world
+license: zlib
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [src]
+    headers: [z]
+    lib: lib/libunzip.a

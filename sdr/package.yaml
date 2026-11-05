@@ -1,0 +1,16 @@
+name: sdr
+origin: ps2sdk
+tier: world
+license: AFL-2.0
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    headers: [kernel]
+    lib: lib/libsdr.a
+  - kind: driver
+    target: [iop]
+    include_dirs: [include]
+    headers: [libsd,intrman,loadcore,sifcmd,sysclib,sysmem,threadman]
+    irx: bin/sdrdrv.irx

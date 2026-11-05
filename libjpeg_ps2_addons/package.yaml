@@ -1,0 +1,12 @@
+name: jpeg_ps2_addons
+origin: port:libjpeg_ps2_addons
+tier: world
+license: MIT
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    headers: [jpeg]
+    links: [jpeg]
+    lib: lib/libjpeg_ps2_addons.a

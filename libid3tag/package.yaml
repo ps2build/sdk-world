@@ -1,0 +1,11 @@
+name: id3tag
+origin: port:libid3tag
+tier: world
+license: GPL-2.0
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    headers: [z]
+    lib: lib/libid3tag.a

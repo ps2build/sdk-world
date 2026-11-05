@@ -1,0 +1,13 @@
+project: siocookie
+
+targets:
+  - name: siocookie
+    type: ee_lib
+    sources:
+      - src/SIOCookie.c
+    include_dirs:
+      - include
+    headers: [kernel]
+    cflags:
+      - -fdata-sections
+      - -ffunction-sections

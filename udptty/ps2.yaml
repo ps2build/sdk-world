@@ -1,0 +1,13 @@
+project: udptty
+
+targets:
+  - name: udptty
+    type: iop
+    sources:
+      - src/udptty.c
+    imports_lst: src/imports.lst
+    exports_tab: src/exports.tab
+    defines: [KPRTTY]
+    include_dirs:
+      - src
+    headers: [intrman, ioman, loadcore, stdio, sysclib, sysmem, threadman, ps2ip-nm]

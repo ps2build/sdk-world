@@ -1,0 +1,4 @@
+/**
+ * @defgroup udptty udptty
+ * @brief IOP tty driver that sends console output over UDP; needs the IOP-side ps2ip module at runtime.
+ */

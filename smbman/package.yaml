@@ -1,0 +1,13 @@
+name: smbman
+origin: ps2sdk
+tier: world
+# Per-file licenses:
+#   AFL-3.0  smbman.c, smb.c, smb_fio.c, poll.c, auth.c, md4.c and their headers
+#   SSLeay   des.c (BSD-4-Clause style with an advertising clause; kept verbatim in the file)
+#   AFL-2.0  irx_imports.h
+license: "AFL-3.0 AND SSLeay AND AFL-2.0"
+
+artifacts:
+  - kind: driver
+    target: [iop]
+    irx: bin/smbman.irx

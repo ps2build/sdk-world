@@ -1,0 +1,12 @@
+project: inputx
+
+targets:
+  - name: inputx
+    type: ee_lib
+    sources:
+      - src/input.c
+    defines:
+      - _XINPUT
+    include_dirs:
+      - include
+    headers: [kernel, pad, mtap]

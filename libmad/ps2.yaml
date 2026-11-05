@@ -1,0 +1,26 @@
+project: libmad
+
+targets:
+  - name: mad
+    type: ee_lib
+    sources:
+      - src/version.c
+      - src/fixed.c
+      - src/bit.c
+      - src/timer.c
+      - src/stream.c
+      - src/frame.c
+      - src/synth.c
+      - src/decoder.c
+      - src/layer12.c
+      - src/layer3.c
+      - src/huffman.c
+    include_dirs:
+      - include
+      - src
+    cflags:
+      - -DHAVE_CONFIG_H
+      - -DHAVE_SYS_TYPES_H
+      - -DHAVE_ERRNO_H
+      - -DHAVE_UNISTD_H
+      - -DHAVE_FCNTL_H

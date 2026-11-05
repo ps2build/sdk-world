@@ -1,0 +1,11 @@
+project: subfile
+
+targets:
+  - name: subfile
+    type: iop
+    sources:
+      - src/subfile.c
+    imports_lst: src/imports.lst
+    include_dirs:
+      - src
+    headers: [intrman, ioman, loadcore, sysclib, sysmem]

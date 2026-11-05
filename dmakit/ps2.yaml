@@ -1,0 +1,12 @@
+project: dmakit
+
+targets:
+  - name: dmakit
+    type: ee_lib
+    sources:
+      - src/dmaCore.c
+      - src/dmaInit.c
+      - src/dmaSpr.c
+    include_dirs:
+      - include
+    headers: [kernel]

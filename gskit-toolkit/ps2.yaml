@@ -1,0 +1,12 @@
+project: gskit-toolkit
+
+targets:
+  - name: gskit_toolkit
+    type: ee_lib
+    sources:
+      - src/gsToolkit.c
+    defines:
+      - HAVE_LIBPNG
+    include_dirs:
+      - include
+    headers: [gskit, dmakit, png]

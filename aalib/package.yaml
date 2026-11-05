@@ -1,0 +1,11 @@
+name: aa
+origin: port:aalib
+tier: world
+license: GPL-2.0
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    headers: [debug, ps2ip]
+    lib: lib/libaa.a

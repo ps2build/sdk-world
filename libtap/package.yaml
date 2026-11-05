@@ -1,0 +1,10 @@
+name: tap
+origin: port:libtap
+tier: world
+license: LGPL-3.0
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    lib: lib/libtap.a

@@ -1,0 +1,9 @@
+name: mmcedrv
+origin: port:mmceman
+tier: world
+license: MIT
+
+artifacts:
+  - kind: driver
+    target: [iop]
+    irx: bin/mmcedrv.irx

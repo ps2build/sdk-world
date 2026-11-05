@@ -1,0 +1,10 @@
+name: hash
+origin: port:hash-library
+tier: world
+license: Zlib
+
+artifacts:
+  - kind: library
+    target: [ee]
+    include_dirs: [include]
+    lib: lib/libhash.a

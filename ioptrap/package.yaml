@@ -1,0 +1,10 @@
+name: ioptrap
+origin: ps2sdk
+tier: world
+license: AFL-2.0
+
+artifacts:
+  - kind: driver
+    target: [iop]
+    include_dirs: [include]
+    irx: bin/ioptrap.irx

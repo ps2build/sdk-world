@@ -1,0 +1,4 @@
+/**
+ * @defgroup hdd hdd
+ * @brief HDD library functions
+ */

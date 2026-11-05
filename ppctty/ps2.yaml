@@ -1,0 +1,12 @@
+project: ppctty
+
+targets:
+  - name: ppctty
+    type: iop
+    sources:
+      - src/main.c
+      - src/tty.c
+    imports_lst: src/imports.lst
+    include_dirs:
+      - src
+    headers: [excepman, intrman, ioman, loadcore, modload, stdio, sysclib, sysmem, threadman]

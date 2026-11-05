@@ -1,0 +1,9 @@
+name: subfile
+origin: ps2sdk
+tier: world
+license: AFL-2.0
+
+artifacts:
+  - kind: driver
+    target: [iop]
+    irx: bin/subfile.irx

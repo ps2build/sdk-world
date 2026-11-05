@@ -1,0 +1,17 @@
+project: gskit
+
+targets:
+  - name: gskit
+    type: ee_lib
+    sources:
+      - src/gsCore.c
+      - src/gsFontM.c
+      - src/gsHires.c
+      - src/gsInit.c
+      - src/gsMisc.c
+      - src/gsPrimitive.c
+      - src/gsTexManager.c
+      - src/gsTexture.c
+    include_dirs:
+      - include
+    headers: [kernel, cdvd, dmakit]

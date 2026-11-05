@@ -1,0 +1,33 @@
+project: libid3tag
+
+targets:
+  - name: id3tag
+    type: ee_lib
+    sources:
+      - src/version.c
+      - src/ucs4.c
+      - src/latin1.c
+      - src/utf16.c
+      - src/utf8.c
+      - src/parse.c
+      - src/render.c
+      - src/field.c
+      - src/frametype.c
+      - src/compat.c
+      - src/genre.c
+      - src/frame.c
+      - src/crc.c
+      - src/util.c
+      - src/tag.c
+      - src/file.c
+      - src/debug.c
+    include_dirs:
+      - include
+      - src
+    headers: [z]
+    cflags:
+      - -DHAVE_CONFIG_H
+      - -DHAVE_SYS_TYPES_H
+      - -DHAVE_ERRNO_H
+      - -DHAVE_UNISTD_H
+      - -DHAVE_FCNTL_H

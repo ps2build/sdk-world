@@ -1,0 +1,66 @@
+/**
+ * @defgroup audsrv_compat audsrv-compat
+ * @brief The audsrv API on top of the audio library.
+ *
+ * Code written against audsrv builds against this package without source changes. See @ref audsrv_migration
+ * for how each call maps onto audio and what differs.
+ */
+
+/**
+ * @page audsrv_migration Moving from audsrv to audio
+ *
+ * There are two ways to use the audio library from code that calls audsrv.
+ *
+ * - Keep the audsrv calls and link the `audsrv-compat` package. Nothing in the source changes.
+ * - Call the audio library directly, using the table below for the equivalents.
+ *
+ * @section audsrv_migration_build Build setup for unchanged code
+ *
+ * @code{.yaml}
+ * targets:
+ *   - name: game
+ *     type: ee
+ *     sources: [main.c]
+ *     libs: [audsrv-compat]
+ *     embed_irx: [libsd, "audio:audsrv"]
+ * @endcode
+ *
+ * `audsrv-compat` links the `audio` library itself. `"audio:audsrv"` embeds `audio.irx` under the symbol
+ * names `audsrv_irx` and `size_audsrv_irx`, which code that loaded the audsrv module expects. The application
+ * keeps loading `libsd.irx` and then that module before calling audsrv_init(), as before.
+ *
+ * @section audsrv_migration_calls Calls
+ *
+ * | audsrv | audio | Notes |
+ * |---|---|---|
+ * | audsrv_init() | audio_init() | Calling it again returns 0. |
+ * | audsrv_quit() | audio_shutdown() | |
+ * | audsrv_get_error(), audsrv_get_error_string() | audio_get_error_message() | The compatibility layer keeps the last error code itself. |
+ * | audsrv_set_format() | audio_stream_start() | |
+ * | audsrv_wait_audio() | audio_stream_wait_until_writable() | |
+ * | audsrv_play_audio() | audio_stream_wait_until_writable() and audio_stream_queue_pcm() | The compatibility call waits for space in chunks of 4096 bytes, so all data is accepted. audio_stream_queue_pcm() returns what fits. |
+ * | audsrv_stop_audio() | audio_stream_stop_and_clear() | |
+ * | audsrv_set_volume() | audio_stream_set_volume() | Affects the stream only. audio_set_master_volume() scales everything. |
+ * | audsrv_available(), audsrv_queued() | audio_stream_get_free_bytes(), audio_stream_get_queued_bytes() | |
+ * | audsrv_on_fillbuf() | audio_stream_set_low_data_callback() | The threshold is the stream size minus the requested free space. The stream must be started. |
+ * | audsrv_adpcm_init() | audio_sound_free_all() | Stops every channel; the stream keeps playing. |
+ * | audsrv_load_adpcm() | audio_sound_load_apcm() | The compatibility call fills the descriptor from the file header. |
+ * | audsrv_ch_play_adpcm() | audio_channel_play_sound(), audio_play_sound() | See the differences below. |
+ * | audsrv_adpcm_set_volume_and_pan() | audio_channel_set_volume_and_pan() | |
+ * | audsrv_adpcm_set_volume() | audio_channel_set_volume_and_pan() with pan 0 | Matches the audsrv macro, which sets the pan to center. audio_channel_set_volume() leaves the pan unchanged. |
+ * | audsrv_is_adpcm_playing() | audio_channel_get_playing_sound() | |
+ * | audsrv_free_adpcm() | audio_sound_free() | |
+ * | CD audio calls | | Not supported; they return -AUDSRV_ERR_NO_DISC. |
+ *
+ * @section audsrv_migration_differences Differences
+ *
+ * - **Channel already playing.** audsrv_ch_play_adpcm() on a channel that is playing replaces the sound there
+ *   and returns the channel. audsrv documents -AUDSRV_ERR_NO_MORE_CHANNELS for that case.
+ * - **Channel outside 0 to 23.** Plays on the first free channel, as audsrv does. That channel is reset to
+ *   volume 100, centered, normal pitch; channels played on by number keep their settings.
+ * - **Stream volume and sample volume are separate.** audsrv_set_volume() and the channel volumes do not scale
+ *   each other.
+ * - **Volume and pan before the first play** are kept and used when the channel plays.
+ * - **Stream start.** audsrv_on_fillbuf() needs a started stream, so call audsrv_set_format() first.
+ * - **Sample files.** audsrv_load_adpcm() takes APCM (`.adp`) images, as audsrv does. See @ref audio_adp.
+ */

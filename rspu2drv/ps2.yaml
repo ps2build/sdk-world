@@ -1,0 +1,17 @@
+project: rspu2drv
+
+targets:
+  - name: rspu2drv
+    type: iop
+    sources:
+      - src/rsd_main.c
+      - src/rsd_com.c
+      - src/rsd_cb.c
+    imports_lst: src/imports.lst
+    libs: [snd2, spu2]
+    include_dirs:
+      - src
+      - src/include
+      - ../libsnd2/include
+      - ../libspu2/include
+    headers: [intrman, loadcore, sifman, sifcmd, sysclib, threadman, sysmem, vblank]

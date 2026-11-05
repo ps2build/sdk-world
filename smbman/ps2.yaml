@@ -1,0 +1,19 @@
+project: smbman
+
+targets:
+  - name: smbman
+    type: iop
+    sources:
+      - src/smbman.c
+      - src/smb_fio.c
+      - src/smb.c
+      - src/poll.c
+      - src/auth.c
+      - src/des.c
+      - src/md4.c
+    imports_lst: src/imports.lst
+    libs: [gcc]
+    include_dirs:
+      - include
+      - src
+    headers: [intrman, ioman, iomanx, loadcore, sifman, stdio, sysclib, threadman]

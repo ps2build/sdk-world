@@ -1,0 +1,25 @@
+project: sdr
+
+targets:
+  - name: sdr
+    type: ee_lib
+    sources:
+      - src/ee/sdr_cb.c
+      - src/ee/sdr_main.c
+    include_dirs:
+      - include
+      - src/ee
+    headers: [kernel]
+
+  - name: sdrdrv-iop
+    type: iop
+    sources:
+      - src/iop/sdd_main.c
+      - src/iop/sdd_com.c
+      - src/iop/sdd_cb.c
+    imports_lst: src/iop/imports.lst
+    exports_tab: src/iop/exports.tab
+    include_dirs:
+      - include
+      - src/iop
+    headers: [libsd, loadcore, intrman, sifcmd, sysclib, sysmem, threadman]
