@@ -67,3 +67,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.MANIFEST_DISPATCH_TOKEN }}
         run: gh api repos/ps2build/manifest/dispatches -f event_type=component-released
+
+      - name: Update API docs
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ secrets.MANIFEST_DISPATCH_TOKEN }}
+        run: |
+          gh api repos/ps2build/api-docs/dispatches             -f event_type=docs-released             -f 'client_payload[repo]=sdk-world'             -f "client_payload[tag]=$GITHUB_REF_NAME"
